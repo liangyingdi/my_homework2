@@ -1,0 +1,78 @@
+/* --------------list------------ */
+
+.toolsWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.listBtn{
+    border: 1px solid #000;
+    width: 100px;
+    padding: 0 15px;
+    border-radius: 5px;
+    background-color: palevioletred;
+    margin-bottom: 10px;
+    
+}
+
+.listMain {
+    border-top: 1px solid #333;
+}
+
+.item{
+    border: 1px solid #000;
+    border-radius: 2px;
+    margin-top: 10px;
+    width: 200px;
+    text-align: left;
+}
+
+/* -----------modal----------*/
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 8px;
+}
+
+.modalInput {
+    margin-left: 15px;
+    margin-bottom: 24px;
+    border: 1px solid #000;
+}
+
+.modalBtnWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.modalButton {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 4px;
+    margin-left: 10px;
+    background-color: #ccc;
+}
+
+.modalBtnWrapper button:first-child:disabled {
+    opacity: 0.4;
+}
+
+.confirm {
+    background-color: palevioletred;
+}

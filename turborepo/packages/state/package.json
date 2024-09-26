@@ -1,0 +1,6 @@
+{
+    "name": "@repo/state",
+    "exports": {
+        "./state": "./src/fetchData.ts"
+    }
+}
