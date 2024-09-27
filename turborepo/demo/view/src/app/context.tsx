@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import styles from "./page.module.css";
-import { createContext, ReactNode, SetStateAction, useContext, useState } from "react";
+import { createContext, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import LogoutModal from "./components/logoutModal";
+import { checkCookie, deleteCookie } from "./utils";
 
 const defaultName = 'default';
 
@@ -19,17 +20,23 @@ export const context = createContext({
 export const useInfo = () => useContext(context);
 
 export const PageProvider = ({ children }: { children: ReactNode }) => {
+
     const [name, setName] = useState(defaultName);
     const [id, setId] = useState(0);
     const [userId, setUserId] = useState(0);
-    
     const [isModalOpen, setModalOpen] = useState(false);
 
     const openModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
-    const confirmModal = () => {
+    const confirmModal = async () => {
+        // 调用函数删除登录Token
         closeModal();
+        await deleteCookie('token');
     };
+
+    useEffect(() => {
+        checkCookie();
+    },[])
 
     return (
         <context.Provider value={{ name, setName, id, setId, userId, setUserId }}>

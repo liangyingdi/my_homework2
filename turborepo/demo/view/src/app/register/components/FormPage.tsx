@@ -1,24 +1,36 @@
 'use client';
 import { useRouter } from "next/navigation";
 import styles from "../../page.module.css";
-import { useInput } from "./input";
 import { action } from "../action";
-import { useActionState, useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { setCookie } from "../../utils";
 
 export const FormPage = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [seconds, setSeconds] = useState(3);
     const [data, setData] = useState<resultType>();
-    const [_username, username] = useInput({ name: 'username' });
-    const [_password, password] = useInput({ type: 'password', name: 'password' });
+    const { data: sessionData, status } = useSession();
+    const [username, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    console.log(sessionData)
+    console.log(status)
+
+    // const [_username, username, setUserName] = useInput({ name: 'username' });
+    // const [_password, password] = useInput({ type: 'password', name: 'password', placeholder: '密码不能小于6位' });
     const router = useRouter();
+
+    useEffect(() => {
+        if (sessionData) {
+            setUserName(sessionData.user?.name || '');
+        }
+    }, [sessionData])
 
     const formActioin = async (formdata: FormData) => {
         setIsLoading(true);
         try {
-            setTimeout(async() => {
+            setTimeout(async () => {
                 const data = await action(formdata);
                 setData(data);
                 setIsLoading(false);
@@ -26,9 +38,8 @@ export const FormPage = () => {
         } catch (error) {
             alert(`catch error: ${(error as Error).message}`);
             setIsLoading(false);
-        } 
+        }
     }
-
 
     useEffect(() => {
         if (data?.code !== 0) return;
@@ -44,6 +55,10 @@ export const FormPage = () => {
         return () => clearInterval(intervalId);
     }, [seconds, data]);
 
+    const handleSkip = () => {
+        setCookie({username: username});
+    }
+
     return (
         <div className={styles.registerMain}>
             {isLoading ?
@@ -54,10 +69,19 @@ export const FormPage = () => {
                     <div>
                         <form action={formActioin} >
                             <div className={styles.error}>{data?.msg}</div>
-                            {username}
-                            {password}
+                            <label htmlFor={"username"}>username</label><br />
+                            <input id={"username"} name={"username"} type="text" onChange={e => setUserName(e.target.value)} value={username} />
                             <br />
-                            <button disabled={!_username || (_password as string).length < 6}>注册</button>
+                            <label htmlFor={"password"}>password</label><br />
+                            <input id={"password"} name={"password"} type="password" onChange={e => setPassword(e.target.value)} value={password} autoComplete="new-password" />
+                            <br />
+                            {/* {username}
+                            {password} */}
+                            <br />
+                            <div className={styles.registerBtns}>
+                                <button disabled={!username || password.length < 6}>注册</button>
+                                {status === "authenticated" && <a onClick={handleSkip} style={{cursor: "pointer"}}>跳过登录</a>}
+                            </div>
                         </form>
                     </div>
             }

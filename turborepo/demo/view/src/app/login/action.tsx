@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies, headers } from "next/headers";
-import { sign } from 'jsonwebtoken';
+// import { sign } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client'
 
 export const authenticateUser = async (formdata: FormData): Promise<LoginResponse> => {
@@ -10,7 +10,7 @@ export const authenticateUser = async (formdata: FormData): Promise<LoginRespons
 
     const username = formdata.get('username');
     const password = formdata.get('password');
-
+    
     return new Promise((resolve, reject) => {
         prisma.user.findMany({
             where: {

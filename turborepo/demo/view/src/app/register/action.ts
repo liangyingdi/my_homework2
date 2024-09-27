@@ -1,7 +1,5 @@
 'use server';
 
-import { cookies, headers } from "next/headers";
-import { sign } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client'
 
 export const action = async (formdata: FormData): Promise<RegisterResponse> => {
@@ -21,21 +19,8 @@ export const action = async (formdata: FormData): Promise<RegisterResponse> => {
         });
 
         if (newUser.username === username) {
-            // const token = btoa(JSON.stringify({
-            //     username,
-            // }));
-            // cookies().set({
-            //     name: 'token',
-            //     value: token,
-            //     maxAge: 120,
-            //     httpOnly: true,
-            // });
-            // const jwt = sign({ username }, process.env.NAME || '', {
-            //     expiresIn: 10,
-            // });
             return {
                 code: 0,
-                // jwt,
             };
         } else {
             return {
